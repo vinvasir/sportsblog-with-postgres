@@ -44,7 +44,10 @@ router.post('/', (req, res, next) => {
 
 		article	
 		.save()
-		.then(() => res.redirect('/manage/articles'))
+		.then(() => {
+			req.flash('success', 'Article added');
+			res.redirect('/manage/articles');
+		})
 		.catch(err => res.status(500).json({message: err}));
 	}
 });
@@ -102,6 +105,7 @@ router.post('/edit/:id', (req, res, next) => {
 		.save(req.body, {patch: true})
 		.then(article => {
 			console.log("Successfully updated article: " + JSON.stringify(article.toJSON()));
+			req.flash('success', 'Articled updated');
 			res.redirect('/manage/articles');
 		})
 		.catch(err => {
@@ -115,7 +119,9 @@ router.delete('/delete/:id', (req, res, next) => {
 	Article
 	.forge({id: req.params.id})
 	.destroy()
-	.then(() => res.redirect('/manage/articles'))
+	.then(() => {
+		res.redirect('/manage/articles');
+	})
 	.catch(err => {
 		console.error(err, err.stack);
 		res.status(500).json({message: err})

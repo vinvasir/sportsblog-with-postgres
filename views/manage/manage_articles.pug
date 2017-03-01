@@ -6,6 +6,7 @@ block content
 			h1 #{title}
 		.col-md-3
 			a.btn.btn-default.create-btn(href="/manage/articles/add") Add an Article
+	!= messages()
 	table(class='table table-striped')
 		tr
 			th Article Title

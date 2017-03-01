@@ -26,11 +26,13 @@ router.post('/', (req, res, next) => {
 		category
 		.save()
 		.then(category => {
-			console.log("Created category: " + category.toJSON().title);
+			console.log("Created category: " + JSON.stringify(category.toJSON()).title);
+			// Call Express flash, which was set up to use global variables for all the views.
+			req.flash('success', 'Category Created');
 			res.redirect('/manage/categories');
 		})
 		.catch(err => res.status(500).json({message: err}));
-		}
+	}
 });
 
 router.post('/edit/:id', (req, res, next) => {
@@ -58,7 +60,8 @@ router.post('/edit/:id', (req, res, next) => {
 			description: req.body.description
 		}, {patch: true})
 		.then(category => {
-			console.log("Successfully edited category " + category.toJSON().title);
+			console.log("Successfully edited category " + JSON.stringify(category.toJSON()).title);
+			req.flash('success', 'Category updated');
 			res.redirect('/manage/categories');
 		})
 		.catch(err => res.status(500).json({message: err}));

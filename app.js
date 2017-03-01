@@ -30,6 +30,13 @@ app.use(bodyParser.urlencoded({extended: false}));
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Express session
+app.use(session({
+  secret: 'fjei;awhg;hewro',
+  resave: false,
+  saveUninitialized: true
+}));
+
 // Express messages
 app.use(logger('combined'));
 app.use(require('connect-flash')());
