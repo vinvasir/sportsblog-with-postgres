@@ -1,0 +1,18 @@
+extends ../layout
+
+block content
+	.row
+		.col-md-9
+			h1 #{title}
+		.col-md-3
+			a.btn.btn-default.create-btn(href="/manage/categories/add") Add a Category
+	table(class='table table-striped')
+		tr
+			th Category Title
+			th
+		each category, i in categories
+			tr
+				td #{category.title}
+				td
+					a.btn.btn-tiny.btn-default(href="/manage/categories/edit/"+category.id) Edit
+					a.btn.btn-tiny.btn-danger.delete-category.pull-right(href='#', data-cat-id=category.id) Delete
