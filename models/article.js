@@ -11,7 +11,7 @@ const Article = bookshelf.Model.extend({
 		return this.belongsTo('Category', 'category_id');
 	},
 	comments: function() {
-		return this.hasMany(Comment);
+		return this.hasMany('Comment');
 	}
 });
 

@@ -1,9 +1,40 @@
 extends ../layout
 
 block content
-	h1 #{title}
-	p #{article.title}
-	p #{article.subtitle}
-	p A #{category.title} Article
-	p by #{article.author}
-	p #{article.body}
+	h1 #{article.title}
+	h4.post-subtitle #{article.subtitle}
+	h4 A #{category.title} article
+	p.post-meta
+		| Posted by #{article.author}
+		| on #{article.created_at}
+	p.post-body
+		| #{article.body}
+	hr
+	br
+	h4 Add Comment
+	ul.errors
+		if errors
+			each error, i in errors
+				li.alert.alert-danger #{error.msg}
+	p
+		form(action="/articles/comments/"+article.id, method="post")
+			.form-group
+				label Subject
+				input.form-control(type="text", name="subject")
+			.form-group
+				label Name
+				input.form-control(type="text", name="author")
+			.form-group
+				label Email
+				input.form-control(type="text", name="email")
+			.form-group
+				label Body
+				textarea.form-control(name="body")
+			input.btn.btn-default(type="submit" value="Add Comment")
+	br
+	br
+	h4 Comments
+	each comment, i in comments
+		.well
+			h5 Posted by #{comment.author}
+			p #{comment.body}

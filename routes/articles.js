@@ -3,13 +3,14 @@ const router = express.Router();
 
 const Category = require('../models/category.js');
 const Article = require('../models/article.js');
+const Comment = require('../models/comment.js');
 
 router.get('/', (req, res, next) => {
 	Article
 	.fetchAll()
 	.then(articles => {
 		res.render('articles/index', {
-			title: 'Default article index',
+			title: 'All articles',
 			articles: articles.toJSON()
 		});
 	})
@@ -54,14 +55,15 @@ router.post('/', (req, res, next) => {
 
 router.get('/:id', (req, res, next) => {
 	new Article({'id': req.params.id})
-	.fetch({withRelated: ['category']})
+	.fetch({withRelated: ['category', 'comments']})
 	.then(article => {
 		let readable_article = JSON.stringify(article.toJSON());
 		console.log(readable_article);
 		res.render('articles/show', {
 			title: 'Article',
 			article: article.toJSON(),
-			category: article.related('category').toJSON()
+			category: article.related('category').toJSON(),
+			comments: article.related('comments').toJSON()
 		});
 	})
 	.catch(err => {
@@ -139,6 +141,49 @@ router.get('/category/:category_id', (req, res, next) => {
 		});
 	})
 	.catch(err => res.status(500).json({message: err}));
+});
+
+router.post('/comments/:article_id', (req, res, next) => {
+	req.checkBody('subject', 'Subject is required').notEmpty();
+	req.checkBody('author', 'Author is required').notEmpty();
+	req.checkBody('body', 'Body is required').notEmpty();
+
+	let errors = req.validationErrors();
+
+	if(errors){
+		Article
+		.forge({id: req.params.article_id})
+		.fetch({withRelated: ['category', 'comments']})
+		.then(article => {
+			res.render('articles/show', {
+				title: 'Article',
+				article: article.toJSON(),
+				category: article.related('category').toJSON(),
+				comments: article.related('comments').toJSON(),
+				errors: errors
+			})
+		})
+	} else {
+		let comment = new Comment({
+			subject: req.body.subject,
+			article_id: parseInt(req.params.article_id),
+			author: req.body.author,
+			email: req.body.email,
+			body: req.body.body
+		})
+		console.log(JSON.stringify(comment.toJSON()));
+
+		comment
+		.save()
+		.then(comment => {
+			console.log("Created comment " + JSON.stringify(comment.toJSON()).body);
+			res.redirect("/articles/" + req.params.article_id);
+		})
+		.catch(err => {
+			console.error(err, err.stack);
+			res.status(500).json({message: err})
+		});	
+	}
 });
 
 module.exports = router;

@@ -4,3 +4,13 @@ block content
 	.jumbotron.showcase
 		h1 Sports Blog
 		p.lead A simple and clean sports-based blog
+	.row
+		.col-md-12
+			each article, i in articles
+				a(href="/articles/"+article.id)
+					h2.post-title #{article.title}
+				h4.post-subtitle #{article.subtitle}
+				p.post-meta
+					| Posted by #{article.author}
+					| on #{article.created_at}
+				hr
