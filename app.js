@@ -3,6 +3,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const session = require('express-session');
+const passport = require('passport');
 const expressValidator = require('express-validator');
 const port = 3000;
 
@@ -37,11 +38,18 @@ app.use(session({
   saveUninitialized: true
 }));
 
+// Init passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+require('passport-config.js')(passport);
+
 // Express messages
 app.use(logger('combined'));
 app.use(require('connect-flash')());
 app.use((req, res, next) => {
 	res.locals.messages = require('express-messages')(req, res);
+  res.locals.user = req.user || null;
 	next();
 });
 
