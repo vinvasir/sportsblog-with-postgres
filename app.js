@@ -42,7 +42,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-require('passport-config.js')(passport);
+require('./passport-config.js')(passport);
 
 // Express messages
 app.use(logger('combined'));
@@ -78,4 +78,4 @@ app.use('/manage', manage);
 
 app.listen(port, () => {
 	console.log('Server started on port ' + port);
-})
+});
