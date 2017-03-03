@@ -73,6 +73,14 @@ app.use(expressValidator({
   }
 }));
 
+app.use((req, res, next) => {
+  if (res.locals.user) {
+    console.log("This user is logged in: " + JSON.stringify(res.locals.user.toJSON().username));
+  }
+
+  next();
+});
+
 app.use('/', index);
 app.use('/users', users);
 app.use('/articles', articles);
