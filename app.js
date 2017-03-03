@@ -47,7 +47,7 @@ app.use(passport.session());
 require('./passport-config.js')(passport);
 
 // Express messages
-app.use(logger('combined'));
+app.use(logger('dev'));
 app.use(require('connect-flash')());
 app.use((req, res, next) => {
 	res.locals.messages = require('express-messages')(req, res);
