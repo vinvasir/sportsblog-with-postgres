@@ -2,7 +2,7 @@ extends ../layout
 
 block content
 	h1 #{title}
-	form(method="post", action="/login")
+	form(method="post", action="/users/login")
 		.form-group
 			label Username:
 			input.form-control(type="text", name="username")

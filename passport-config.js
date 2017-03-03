@@ -1,6 +1,7 @@
 module.exports = function(passport) {
 	const LocalStrategy = require('passport-local').Strategy;
-
+	const User = require('./models/user.js');
+	
 	// Local Strategy
 
 	passport.use(new LocalStrategy((username, password, done) => {
@@ -41,5 +42,5 @@ module.exports = function(passport) {
 	    done(err);
 	  });
 	});
-	
+
 };

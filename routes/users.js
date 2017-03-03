@@ -41,5 +41,15 @@ module.exports = function(passport) {
 		res.render('users/login', {title: 'Please log in'});
 	});
 
+	// Process login
+
+	router.post('/login', (req, res, next) => {
+		passport.authenticate('local', {
+			successRedirect: '/',
+			failureRedirect: '/login',
+			failureFlash: true
+		})(req, res, next);
+	});	
+
 	return router;
 }
