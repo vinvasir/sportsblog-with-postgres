@@ -15,10 +15,12 @@ exports.bookshelf = require('bookshelf')(knex);
 // init app
 const app = express();
 
-const index = require('./routes/index');
-const articles = require('./routes/articles');
-const categories = require('./routes/categories');
-const manage = require('./routes/manage');
+// define routes and pass in passport as a dependency
+const index = require('./routes/index')(passport);
+const users = require('./routes/users')(passport);
+const articles = require('./routes/articles')(passport);
+const categories = require('./routes/categories')(passport);
+const manage = require('./routes/manage')(passport);
 
 // View Setup
 app.set('views', path.join(__dirname, 'views'));
@@ -72,6 +74,7 @@ app.use(expressValidator({
 }));
 
 app.use('/', index);
+app.use('/users', users);
 app.use('/articles', articles);
 app.use('/categories', categories);
 app.use('/manage', manage);
